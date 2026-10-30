@@ -1,5 +1,8 @@
 # Historique des versions
 
+## 1.6 - 2026-10-30
+- Boutons « Masquer » et « Masquer le mois » retirés de l'espace Pascal : il y reste l'ajout et la suppression de créneaux.
+
 ## 1.5 - 2026-10-30
 - 7 créneaux de décembre ajoutés : vendredi 4 (13h, 19h), jeudi 17 (13h), vendredi 18 (11h, 13h, 17h, 19h).
 - Créneaux masqués : nouvelle colonne « Archivé » dans le Sheet. Un créneau masqué n'est plus montré à Maxime mais garde ses réponses ; il se réaffiche d'un clic dans l'espace Pascal (par créneau ou par mois).

@@ -292,7 +292,7 @@ dialog .actions{display:flex;gap:8px;align-items:center}
     <section id="secAdmin" hidden>
       <h2>Gérer les créneaux</h2>
       <div class="panel">
-        <p>Toucher un horaire plus haut le marque comme réservé. Ici, tu ajoutes des créneaux, tu les masques à Maxime (sans perdre ses réponses) ou tu les supprimes.</p>
+        <p>Toucher un horaire plus haut le marque comme réservé. Ici, tu ajoutes ou supprimes des créneaux.</p>
         <form class="form-row" id="addForm">
           <label>Date<input type="date" name="date" required></label>
           <label>Heure<input type="time" name="heure" value="09:00" required></label>
@@ -317,7 +317,7 @@ dialog .actions{display:flex;gap:8px;align-items:center}
     </section>
   </main>
 
-  <footer>Pétanque sur Glace · version 1.5 · <button type="button" class="linkbtn" id="adminBtn">espace Pascal</button></footer>
+  <footer>Pétanque sur Glace · version 1.6 · <button type="button" class="linkbtn" id="adminBtn">espace Pascal</button></footer>
 </div>
 
 <dialog id="pwd">
@@ -509,14 +509,11 @@ function render(){
       const m = c.date.slice(0,7);
       if (m!==mo){
         mo = m;
-        const duMois = all.filter(x=>x.date.slice(0,7)===m), tousMasques = duMois.every(x=>x.archive);
-        h += `<li class="mois-row"><span class="grow">${cap(fmtMois.format(parseDate(m+"-01")))}</span>
-          <button type="button" class="btn small" data-archmois="${m}" data-val="${tousMasques?"":"1"}">${tousMasques?"Réafficher le mois":"Masquer le mois"}</button></li>`;
+        h += `<li class="mois-row"><span class="grow">${cap(fmtMois.format(parseDate(m+"-01")))}</span></li>`;
       }
       const dc = parseDate(c.date);
       h += `<li class="${c.archive?"masque":""}"><span class="grow">${cap(fmtD.format(dc).replace(".",""))} ${dc.getDate()} ${fmtM.format(dc)} · ${plage(c.heure)}${c.archive?' <span class="pill">Masqué</span>':""}</span>
         <span class="pill ${CLS[c.reponse||""]}">${LIBELLE[c.reponse||""]}</span>
-        <button type="button" class="btn small" data-arch="${esc(c.id)}">${c.archive?"Réafficher":"Masquer"}</button>
         <button type="button" class="btn small danger" data-del="${esc(c.id)}" aria-label="Supprimer ce créneau">Supprimer</button></li>`;
     });
     $("#adminList").innerHTML = h;
@@ -601,15 +598,6 @@ $("#addForm").addEventListener("submit", e=>{
   write(()=>{ state.creneaux.push({id, date, heure, reponse:"", archive:false}); }, ()=>postPascal({action:"addCreneau", date, heure}), "Créneau ajouté");
 });
 $("#adminList").addEventListener("click", e=>{
-  const ar = e.target.closest("[data-arch],[data-archmois]");
-  if (ar){
-    const ids = ar.dataset.arch ? [ar.dataset.arch] : state.creneaux.filter(x=>x.date.slice(0,7)===ar.dataset.archmois).map(x=>x.id);
-    const masquer = ar.dataset.arch ? !byId(ar.dataset.arch).archive : ar.dataset.val==="1";
-    write(()=>{ ids.forEach(id=>{ const c = byId(id); if (c) c.archive = masquer; }); },
-      ()=>postPascal({action:"setArchive", ids, archive:masquer}),
-      (ids.length>1 ? ids.length+" créneaux " : "Créneau ") + (masquer ? (ids.length>1?"masqués":"masqué") : (ids.length>1?"réaffichés":"réaffiché")));
-    return;
-  }
   const b = e.target.closest("[data-del]"); if (!b) return;
   const id = b.dataset.del, c = byId(id);
   if (!confirm("Supprimer le créneau du " + fmtJour.format(parseDate(c.date)) + ", " + plage(c.heure) + " ?")) return;
