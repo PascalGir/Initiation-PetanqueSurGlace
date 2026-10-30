@@ -25,7 +25,7 @@ Sans `API_URL` dans `config.js`, la page fonctionne en **mode démo** : les rép
 ## Mise en route
 
 1. **Google Sheet** : créer un Google Sheet vide nommé « Pétanque sur Glace », puis **Extensions → Apps Script**. Coller le contenu de `Code.gs`, enregistrer.
-2. **Installer** : choisir la fonction `installer` puis **Exécuter** et autoriser l'accès. Les onglets **Creneaux** (avec les 18 créneaux de novembre) et **Infos** sont créés ; **Journal** se crée à la première réponse.
+2. **Installer** : choisir la fonction `installer` puis **Exécuter** et autoriser l'accès. Les onglets **Creneaux** (avec les 17 créneaux de novembre) et **Infos** sont créés ; **Journal** se crée à la première réponse.
 3. **Mot de passe** : **Paramètres du projet → Propriétés du script → Ajouter** `CODE_CAPITAINE` avec le mot de passe choisi (jamais dans un fichier public).
 4. **Déployer** : **Déployer → Nouveau déploiement → Application Web**, exécuter en tant que *Moi*, accès *Tout le monde*. Copier l'adresse `…/exec` dans `API_URL` de `config.js`.
 5. **GitHub Pages** : dans le dépôt, **Settings → Pages → Deploy from a branch → main / (root)**.

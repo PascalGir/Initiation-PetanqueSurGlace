@@ -1,5 +1,10 @@
 # Historique des versions
 
+## 1.1 - 2026-10-30
+- Nouveau logo : pierre de curling de profil, posée sur la glace (bannière, icône du navigateur et du téléphone).
+- Message d'accueil pour Maxime en haut de la page : à quoi sert la page et quoi faire. Il devient « C'est réservé » une fois le créneau réservé.
+- Créneau du vendredi 13 novembre 19h-21h retiré : 17 créneaux, tous en journée.
+
 ## 1.0 - 2026-10-29
 - Première version, design repris de StoneTroopers (bannière glace, cartes, pastilles, jauge, légende).
 - 18 créneaux de novembre 2026 : vendredis 13, 20, 27 et dimanches 15, 22, de 2 h chacun.
