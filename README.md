@@ -16,11 +16,11 @@ Adresse de la page : https://pascalgir.github.io/Initiation-PetanqueSurGlace/
 | `index.html` | La page |
 | `config.js` | Réglages : adresse du script Google, durée, lieu, rappels d'agenda, bloc « Infos pratiques » |
 | `Code.gs` | Script Google Apps Script relié au Google Sheet (copie de référence) |
-| `data.js` | Créneaux de départ, utilisés en mode démo ou si le Google Sheet ne répond pas |
+| `data.js` | Créneaux de départ, utilisés si le Google Sheet ne répond pas ou n'est pas encore branché |
 | `CHANGELOG.md` | Historique des versions |
 | `icon-180.png` | Icône sur l'écran d'accueil du téléphone |
 
-Sans `API_URL` dans `config.js`, la page fonctionne en **mode démo** : les réponses restent sur l'appareil.
+Tant que `API_URL` est vide dans `config.js`, les réponses restent sur l'appareil de Maxime : branche le Google Sheet avant de lui envoyer le lien.
 
 ## Mise en route
 

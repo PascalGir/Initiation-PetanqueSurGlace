@@ -1,5 +1,5 @@
 // Colle ici l'URL de l'application Web Google Apps Script (voir README).
-// Laisse vide pour un mode démo : les réponses restent alors sur l'appareil.
+// Tant qu'elle est vide, les réponses restent sur l'appareil de la personne qui répond.
 window.PSG_CONFIG = {
   API_URL: "",
   // Durée d'une initiation en minutes (sert aux plages horaires et à l'export agenda)

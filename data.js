@@ -1,4 +1,4 @@
-// Données de secours et du mode démo (utilisées si le Google Sheet ne répond pas ou si API_URL est vide)
+// Créneaux de secours (utilisés si le Google Sheet ne répond pas ou si API_URL est vide)
 window.PSG_DATA = {
  "creneaux": [
   {

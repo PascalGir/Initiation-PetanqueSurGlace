@@ -1,5 +1,8 @@
 # Historique des versions
 
+## 1.2 - 2026-10-30
+- Plus aucune mention de « mode démo » sur la page ni dans les fichiers.
+
 ## 1.1 - 2026-10-30
 - Nouveau logo : pierre de curling de profil, posée sur la glace (bannière, icône du navigateur et du téléphone).
 - Message d'accueil pour Maxime en haut de la page : à quoi sert la page et quoi faire. Il devient « C'est réservé » une fois le créneau réservé.
