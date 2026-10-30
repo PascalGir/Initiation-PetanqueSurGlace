@@ -1,7 +1,7 @@
 // Colle ici l'URL de l'application Web Google Apps Script (voir README).
 // Tant qu'elle est vide, les réponses restent sur l'appareil de la personne qui répond.
 window.PSG_CONFIG = {
-  API_URL: "",
+  API_URL: "https://script.google.com/macros/s/AKfycbwDKNkWhnItkhd-HZmtgCFfCsK6rR4KnSemEAZzuzUsi_BrnEOuUcqNLF6Fx4lSRJ2d/exec",
   // Durée d'une initiation en minutes (sert aux plages horaires et à l'export agenda)
   DUREE_MIN: 120,
   // Rappels dans l'agenda, en minutes avant l'initiation (1440 = 1 jour, 120 = 2 h)
