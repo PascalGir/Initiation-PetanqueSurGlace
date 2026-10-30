@@ -1,5 +1,8 @@
 # Historique des versions
 
+## 1.4 - 2026-10-30
+- Quatrième choix « Effacer ma réponse » dans le petit menu, affiché seulement quand l'horaire a déjà une réponse.
+
 ## 1.3 - 2026-10-30
 - Toucher un horaire ouvre un petit menu : Ça me va, Peut-être, Impossible. Un seul toucher pour choisir, la réponse actuelle est entourée, et le menu se ferme si on touche ailleurs.
 

@@ -215,6 +215,9 @@ dialog .actions{display:flex;gap:8px;align-items:center}
 .menu button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .menu .ic{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-style:normal;font-weight:800;color:#fff;flex:none}
 .menu .o-oui .ic{background:var(--c-oui)} .menu .o-incertain .ic{background:var(--p-inc-ic)} .menu .o-non .ic{background:var(--c-non)}
+.menu .o-vide{font-weight:500;font-size:13.5px;color:var(--muted);margin-top:3px;border-top:1px solid var(--line);border-radius:0 0 10px 10px;padding-top:10px}
+.menu .o-vide:hover{border-radius:10px}
+.menu .o-vide .ic{background:var(--surface-2);color:var(--muted)}
 .menu .o-oui.on{background:var(--p-oui-bg);border-color:var(--p-oui-line);color:var(--p-oui-ink)}
 .menu .o-incertain.on{background:var(--p-inc-bg);border-color:var(--p-inc-line);color:var(--p-inc-ink)}
 .menu .o-non.on{background:var(--p-non-bg);border-color:var(--p-non-line);color:var(--p-non-ink)}
@@ -310,7 +313,7 @@ dialog .actions{display:flex;gap:8px;align-items:center}
     </section>
   </main>
 
-  <footer>Pétanque sur Glace · version 1.3 · <button type="button" class="linkbtn" id="adminBtn">espace Pascal</button></footer>
+  <footer>Pétanque sur Glace · version 1.4 · <button type="button" class="linkbtn" id="adminBtn">espace Pascal</button></footer>
 </div>
 
 <dialog id="pwd">
@@ -329,8 +332,8 @@ dialog .actions{display:flex;gap:8px;align-items:center}
 
 <div class="menu" id="choix" role="menu" aria-label="Ta réponse" hidden></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<script src="data.js?v=5"></script>
-<script src="config.js?v=5"></script>
+<script src="data.js?v=6"></script>
+<script src="config.js?v=6"></script>
 <script>
 (function(){
 "use strict";
@@ -522,7 +525,8 @@ function openMenu(chip, id){
   menuId = id;
   const cur = c.reponse || "";
   menu.innerHTML = `<div class="menu-t">${cap(fmtJour.format(parseDate(c.date)))} · ${plage(c.heure)}</div>` +
-    ["Oui","Incertain","Non"].map(v=>`<button type="button" role="menuitemradio" aria-checked="${v===cur}" class="o-${CLS[v]}${v===cur?" on":""}" data-v="${v}"><i class="ic" aria-hidden="true">${ICON[v]}</i>${LIBELLE[v]}</button>`).join("");
+    ["Oui","Incertain","Non"].map(v=>`<button type="button" role="menuitemradio" aria-checked="${v===cur}" class="o-${CLS[v]}${v===cur?" on":""}" data-v="${v}"><i class="ic" aria-hidden="true">${ICON[v]}</i>${LIBELLE[v]}</button>`).join("") +
+    (cur ? `<button type="button" role="menuitem" class="o-vide" data-v=""><i class="ic" aria-hidden="true">${ICON[""]}</i>Effacer ma réponse</button>` : "");
   menu.hidden = false;
   const r = chip.getBoundingClientRect(), mw = menu.offsetWidth, mh = menu.offsetHeight;
   let left = r.left + r.width/2 - mw/2;
@@ -540,6 +544,7 @@ function closeMenu(focusChip){
 }
 menu.addEventListener("click", e=>{
   const b = e.target.closest("button[data-v]"); if (!b) return;
+  // data-v vide = effacer la réponse
   const id = menuId, c = byId(id), v = b.dataset.v;
   closeMenu(false);
   if (!c) return;
