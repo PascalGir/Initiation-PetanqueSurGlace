@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pétanque sur Glace - Initiation curling</title>
+<meta name="description" content="Choix du créneau d’initiation au curling de Maxime, novembre 2026, Curling Club Morges">
+<meta name="theme-color" content="#dcecf8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0c1d30" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Ccircle cx='24' cy='24' r='23' fill='%23d6e9f5'/%3E%3Ccircle cx='24' cy='24' r='17' fill='%236f7d8a'/%3E%3Ccircle cx='24' cy='24' r='13.5' fill='%2394a1ad'/%3E%3Crect x='22' y='12' width='4' height='15' rx='2' fill='%23c8323c'/%3E%3Ccircle cx='24' cy='25' r='5' fill='%23c8323c'/%3E%3C/svg%3E">
+<style>
+/* ============ Couleurs (clair / sombre) — identiques à StoneTroopers ============ */
+:root{
+  --bg:#f1f5f9; --surface:#ffffff; --surface-2:#e9f0f6; --ink:#14202b; --muted:#5b6977;
+  --line:#d6e0e8; --accent:#1d4e89; --accent-ink:#ffffff; --house:#c8323c;
+  --hero-a:#f7fbff; --hero-b:#dcecf8; --hero-ink:#0e2c52; --hero-sub:#3d5a7a; --hero-mut:#5b6977;
+  --hero-line:#c7d9ea; --hero-ice:rgba(255,255,255,.55); --hero-hog:rgba(200,50,60,.5);
+  --ok:#1f7a4d; --ok-bg:#dff3e8; --warn:#8a5a00; --warn-bg:#fff1cc;
+  --bad:#a52a2a; --bad-bg:#fbe1df;
+  --c-oui:#1f8a55; --c-inc:#e2a514; --c-non:#d64545; --c-vide:#ffffff; --c-vide-ink:#8a97a3;
+  --p-oui-bg:#dff3e8; --p-oui-ink:#1f6b45; --p-oui-line:#9fd4b6;
+  --p-inc-bg:#fff3d1; --p-inc-ink:#7a5600; --p-inc-line:#ecd08a; --p-inc-ic:#e2a514;
+  --p-non-bg:#fbe4e4; --p-non-ink:#a33636; --p-non-line:#eeb0b0;
+  --p-acc-bg:#e3ecf7; --p-acc-ink:#1d4e89;
+  --shadow:0 1px 2px rgba(20,40,60,.06),0 6px 20px rgba(20,40,60,.07);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0c141b; --surface:#142029; --surface-2:#1b2935; --ink:#e7eef4; --muted:#95a5b3;
+    --line:#26364a; --accent:#6aa7e8; --accent-ink:#0c141b; --house:#ec5f68;
+    --hero-a:#17324f; --hero-b:#0c1d30; --hero-ink:#f2f7fb; --hero-sub:#a9c2dc; --hero-mut:#8ea6bd;
+    --hero-line:#26364a; --hero-ice:rgba(255,255,255,.05); --hero-hog:rgba(236,95,104,.45);
+    --ok:#6fd3a0; --ok-bg:#163a2a; --warn:#f2c35c; --warn-bg:#3a2f12; --bad:#f08a80; --bad-bg:#3d1c1a;
+    --c-oui:#2fa56b; --c-inc:#d8a428; --c-non:#c74850; --c-vide:#142029; --c-vide-ink:#7f909f;
+    --p-oui-bg:#163a2a; --p-oui-ink:#7fd8a8; --p-oui-line:#2c6b4c;
+    --p-inc-bg:#3a2f12; --p-inc-ink:#f2c35c; --p-inc-line:#6b5520; --p-inc-ic:#d8a428;
+    --p-non-bg:#3d1c1a; --p-non-ink:#f39a92; --p-non-line:#74322f;
+    --p-acc-bg:#1b2f48; --p-acc-ink:#9cc6f0;
+    --shadow:none; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0c141b; --surface:#142029; --surface-2:#1b2935; --ink:#e7eef4; --muted:#95a5b3;
+  --line:#26364a; --accent:#6aa7e8; --accent-ink:#0c141b; --house:#ec5f68;
+  --hero-a:#17324f; --hero-b:#0c1d30; --hero-ink:#f2f7fb; --hero-sub:#a9c2dc; --hero-mut:#8ea6bd;
+  --hero-line:#26364a; --hero-ice:rgba(255,255,255,.05); --hero-hog:rgba(236,95,104,.45);
+  --ok:#6fd3a0; --ok-bg:#163a2a; --warn:#f2c35c; --warn-bg:#3a2f12; --bad:#f08a80; --bad-bg:#3d1c1a;
+  --c-oui:#2fa56b; --c-inc:#d8a428; --c-non:#c74850; --c-vide:#142029; --c-vide-ink:#7f909f;
+  --p-oui-bg:#163a2a; --p-oui-ink:#7fd8a8; --p-oui-line:#2c6b4c;
+  --p-inc-bg:#3a2f12; --p-inc-ink:#f2c35c; --p-inc-line:#6b5520; --p-inc-ic:#d8a428;
+  --p-non-bg:#3d1c1a; --p-non-ink:#f39a92; --p-non-line:#74322f;
+  --p-acc-bg:#1b2f48; --p-acc-ink:#9cc6f0;
+  --shadow:none; color-scheme:dark;
+}
+
+/* ============ Base ============ */
+*{box-sizing:border-box}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:880px;margin:0 auto;padding:0 16px 48px}
+h2{font-size:13px;margin:26px 0 10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.07em}
+footer{margin-top:30px;font-size:12px;color:var(--muted);text-align:center}
+.linkbtn{font:inherit;color:inherit;background:none;border:0;padding:0;text-decoration:underline;cursor:pointer}
+
+/* ============ Bannière « Glace » ============ */
+.hero{color:var(--hero-ink);border-bottom:1px solid var(--hero-line);position:relative;overflow:hidden;
+  background:
+    linear-gradient(90deg,transparent 0 70%,var(--hero-hog) 70% calc(70% + 3px),transparent 0),
+    repeating-linear-gradient(100deg,transparent 0 18px,var(--hero-ice) 18px 19px),
+    linear-gradient(180deg,var(--hero-a),var(--hero-b));}
+.hero .house{position:absolute;right:-40px;top:50%;width:190px;height:190px;transform:translateY(-50%);pointer-events:none}
+.hero-in{position:relative;z-index:1;max-width:880px;margin:0 auto;padding:22px 150px 20px 16px;display:flex;gap:14px;align-items:center;min-height:116px}
+.logo{width:54px;height:54px;flex:none;filter:drop-shadow(0 2px 6px rgba(0,0,0,.25))}
+.hero h1{font-size:26px;line-height:1.1;margin:0;letter-spacing:-.01em;font-weight:800}
+.hero .sub{color:var(--hero-sub);font-size:13.5px;margin-top:4px}
+.sync{font-size:12px;color:var(--hero-mut);margin-top:6px}
+
+/* ============ Aide et progression ============ */
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:16px 0 6px}
+.spacer{flex:1}
+.hint{font-size:13px;color:var(--muted);margin:4px 0 0}
+.hint b{color:var(--ink)}
+.hint .seq{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px 5px;vertical-align:middle;margin-left:2px}
+.hint .seq .av{font-size:12px;padding:2px 5px 2px 9px;gap:5px;border-width:1.5px}
+.hint .seq .ic{width:15px;height:15px;font-size:9.5px}
+.hint .seq .arr{color:var(--muted);font-weight:700}
+.admin-tag{font-size:11.5px;font-weight:700;background:var(--p-acc-bg);color:var(--p-acc-ink);padding:3px 9px;border-radius:99px}
+.gauge{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted)}
+.gauge .bar{display:flex;gap:2px;width:126px;height:7px}
+.gauge .bar i{flex:1;border-radius:2px;background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--line)}
+.gauge .bar i.g-oui{background:var(--c-oui);box-shadow:none}
+.gauge .bar i.g-incertain{background:var(--c-inc);box-shadow:none}
+.gauge .bar i.g-non{background:var(--c-non);box-shadow:none}
+
+/* ============ Boutons, champs ============ */
+.btn{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:7px 12px;cursor:pointer}
+.btn:hover{filter:brightness(.97)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+textarea{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%;min-height:76px;resize:vertical}
+textarea:focus{outline:2px solid var(--accent);outline-offset:0;border-color:transparent}
+
+/* ============ Cartes jour (= cartes de match) ============ */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:14px;display:grid;grid-template-columns:64px 1fr;gap:14px;margin-bottom:10px;position:relative;overflow:hidden}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--st,transparent)}
+.datebox{text-align:center;border-radius:10px;background:var(--surface-2);padding:8px 0;align-self:start}
+.datebox .d{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.datebox .n{font-size:24px;font-weight:700;line-height:1.1}
+.datebox .m{font-size:12px;color:var(--muted)}
+.top{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline}
+.opp{font-size:17px;font-weight:650}
+.meta{color:var(--muted);font-size:13px}
+.statusline{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:6px 0 10px}
+.badge{font-size:12.5px;font-weight:600;padding:3px 9px;border-radius:99px}
+.s-ok{--st:var(--ok)} .s-ok .badge{background:var(--ok-bg);color:var(--ok)}
+.s-warn{--st:var(--warn)} .s-warn .badge{background:var(--warn-bg);color:var(--warn)}
+.s-bad{--st:var(--bad)} .s-bad .badge{background:var(--bad-bg);color:var(--bad)}
+.s-none{--st:var(--line)} .s-none .badge{background:var(--surface-2);color:var(--muted)}
+.month{font-size:12px;font-weight:700;color:var(--accent);margin:16px 0 8px;display:flex;align-items:center;gap:10px}
+.month::after{content:"";flex:1;height:1px;background:var(--line)}
+.month:first-child{margin-top:0}
+
+/* ============ Créneau retenu (= prochain match) ============ */
+.card.hero-card{border:2px solid var(--accent);padding:18px;grid-template-columns:84px 1fr;gap:18px}
+.hero-card .datebox{background:var(--accent);color:var(--accent-ink);padding:10px 0}
+.hero-card .datebox .d,.hero-card .datebox .m{color:inherit;opacity:.85}
+.hero-card .datebox .n{font-size:32px}
+.hero-card .opp{font-size:21px;font-weight:750}
+.countdown{font-size:12px;font-weight:700;background:var(--p-non-bg);color:var(--p-non-ink);padding:3px 9px;border-radius:99px;text-transform:uppercase;letter-spacing:.04em}
+.hero-card .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+
+/* ============ Pastilles (créneaux horaires) ============ */
+.players{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:inherit;color:var(--ink);background:transparent;border:0;padding:0;display:inline-flex;min-width:0;border-radius:99px}
+.chip .av{display:inline-flex;align-items:center;gap:7px;border-radius:99px;padding:5px 7px 5px 13px;font-weight:650;font-size:13.5px;line-height:1.2;white-space:nowrap;background:var(--c-vide);color:var(--c-vide-ink);border:2px dashed var(--line);transition:transform .08s;font-variant-numeric:tabular-nums}
+.chip .ic{width:19px;height:19px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-style:normal;font-weight:800;background:var(--surface-2);color:var(--muted);flex:none}
+.chip.v-oui .av{background:var(--p-oui-bg);color:var(--p-oui-ink);border:2px solid var(--p-oui-line)}
+.chip.v-oui .ic{background:var(--c-oui);color:#fff}
+.chip.v-incertain .av{background:var(--p-inc-bg);color:var(--p-inc-ink);border:2px solid var(--p-inc-line)}
+.chip.v-incertain .ic{background:var(--p-inc-ic);color:#fff}
+.chip.v-non .av{background:var(--p-non-bg);color:var(--p-non-ink);border:2px solid var(--p-non-line)}
+.chip.v-non .ic{background:var(--c-non);color:#fff}
+.chip.retenu .av{box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--accent)}
+button.chip{cursor:pointer}
+button.chip:hover .av{transform:scale(1.04)}
+button.chip:active .av{transform:scale(.96)}
+button.chip:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.14)}100%{transform:scale(1)}}
+.chip.pop .av{animation:pop .28s ease-out}
+@media (prefers-reduced-motion: reduce){.chip.pop .av{animation:none}}
+
+/* ============ Panneaux ============ */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px}
+.panel p{margin:0 0 10px;font-size:13px;color:var(--muted)}
+.panel .row{display:flex;gap:8px;align-items:center;margin-top:8px}
+.infos{display:grid;gap:8px;font-size:14px}
+.infos div{display:flex;gap:10px}
+.infos .k{color:var(--muted);min-width:78px;font-size:13px;padding-top:1px}
+.legend{display:grid;gap:6px;font-size:13px;color:var(--muted)}
+.legend .dots{display:flex;flex-wrap:wrap;gap:8px}
+.legend .dots .av{font-size:12.5px;padding:3px 6px 3px 11px}
+.legend .dots .ic{width:16px;height:16px;font-size:10px}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s;max-width:calc(100% - 32px);z-index:10}
+.toast.show{opacity:1}
+
+
+/* ============ Espace Pascal ============ */
+.form-row{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end}
+.form-row label{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--muted)}
+input{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:7px 9px;min-width:0}
+input:focus{outline:2px solid var(--accent);outline-offset:0;border-color:transparent}
+.rows{list-style:none;margin:12px 0 0;padding:0}
+.rows li{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:14px}
+.rows li .grow{flex:1;min-width:0}
+.pill{font-size:11.5px;padding:2px 7px;border-radius:99px;background:var(--surface-2);color:var(--muted)}
+.pill.oui{background:var(--p-oui-bg);color:var(--p-oui-ink)} .pill.incertain{background:var(--p-inc-bg);color:var(--p-inc-ink)} .pill.non{background:var(--p-non-bg);color:var(--p-non-ink)}
+.btn.small{font-size:13px;padding:4px 9px}
+.btn.danger{color:var(--bad);border-color:var(--bad)}
+.btn:disabled{opacity:.5;cursor:default}
+.log-r{font-size:13px;color:var(--muted);padding:3px 0}
+.log-r b{color:var(--ink)}
+.msg-recu{font-size:14px;background:var(--surface-2);border-radius:10px;padding:10px 12px;white-space:pre-wrap}
+dialog{border:1px solid var(--line);border-radius:16px;padding:0;background:var(--surface);color:var(--ink);width:min(400px,calc(100% - 32px));box-shadow:0 10px 40px rgba(0,0,0,.25)}
+dialog::backdrop{background:rgba(10,20,30,.45)}
+dialog form{padding:18px;display:grid;gap:12px}
+dialog h3{margin:0;font-size:18px}
+dialog label{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--muted)}
+dialog .actions{display:flex;gap:8px;align-items:center}
+.dlg-p{margin:0;font-size:13px;color:var(--muted)}
+.dlg-err{margin:0;color:var(--bad);font-size:13px;font-weight:600}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+/* ============ Téléphone ============ */
+@media (max-width:560px){
+  .hero-in{padding:18px 16px 16px;min-height:0}
+  .hero{background:repeating-linear-gradient(100deg,transparent 0 18px,var(--hero-ice) 18px 19px),linear-gradient(180deg,var(--hero-a),var(--hero-b))}
+  .hero .house{right:-55px;top:-55px;width:110px;height:110px;transform:none}
+  .hero h1{font-size:21px}
+  .logo{width:44px;height:44px}
+  .card,.card.hero-card{grid-template-columns:1fr;gap:10px}
+  .datebox,.hero-card .datebox{display:flex;gap:8px;align-items:baseline;padding:6px 10px;text-align:left;width:max-content}
+  .datebox .n,.hero-card .datebox .n{font-size:18px}
+  .hero-card .opp{font-size:19px}
+  .chip .av{font-size:13px;padding:5px 6px 5px 11px;gap:6px}
+}
+</style>
+</head>
+<body>
+<header class="hero">
+  <svg class="house" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="49" fill="#6aa7e8" opacity=".9"/><circle cx="50" cy="50" r="36" fill="#fff"/><circle cx="50" cy="50" r="24" fill="#c8323c"/><circle cx="50" cy="50" r="10" fill="#fff"/><path d="M0 50H100M50 0V100" stroke="#0e2c52" stroke-opacity=".25" stroke-width="1"/></svg>
+  <div class="hero-in">
+    <!-- Logo : pierre de curling vue de dessus (la « boule » de la pétanque sur glace) -->
+    <svg class="logo" viewBox="0 0 48 48" aria-hidden="true">
+      <circle cx="24" cy="24" r="23" fill="#d6e9f5"/>
+      <circle cx="24" cy="24" r="17" fill="#6f7d8a"/>
+      <circle cx="24" cy="24" r="13.5" fill="#94a1ad"/>
+      <circle cx="19" cy="18" r="1" fill="#6f7d8a"/><circle cx="29" cy="30" r="1.2" fill="#6f7d8a"/><circle cx="30" cy="17" r=".8" fill="#6f7d8a"/><circle cx="17" cy="29" r=".9" fill="#6f7d8a"/>
+      <rect x="22" y="12" width="4" height="15" rx="2" fill="#c8323c"/>
+      <circle cx="24" cy="25" r="5" fill="#c8323c"/><circle cx="24" cy="25" r="2" fill="#fff" opacity=".7"/>
+    </svg>
+    <div>
+      <h1>Pétanque sur Glace</h1>
+      <div class="sub">Initiation au curling de Maxime · novembre 2026</div>
+      <div class="sync" id="maj">Curling Club Morges</div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="toolbar">
+    <span class="gauge" id="gauge"></span>
+    <span class="spacer"></span>
+    <span class="admin-tag" id="adminTag" hidden>Mode Pascal</span>
+  </div>
+  <div class="hint" id="hint"></div>
+
+  <main>
+    <section id="secRetenu" hidden><h2>Ton initiation</h2><div id="retenu"></div></section>
+    <section><h2>Créneaux possibles</h2><div id="list"></div></section>
+
+    <section id="secMsg">
+      <h2>Un mot pour Pascal</h2>
+      <div class="panel">
+        <p>Une préférence, une contrainte, une question ? Facultatif.</p>
+        <label for="msg" class="sr">Message pour Pascal</label>
+        <textarea id="msg" maxlength="400" placeholder="Par exemple : plutôt le matin si possible"></textarea>
+        <div class="row"><span class="spacer"></span><button type="button" class="btn primary" id="msgSave">Enregistrer le message</button></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Infos pratiques</h2>
+      <div class="panel infos" id="infos"></div>
+    </section>
+
+    <section id="secAdmin" hidden>
+      <h2>Gérer les créneaux</h2>
+      <div class="panel">
+        <p>Toucher un horaire plus haut le marque comme réservé. Ici, tu ajoutes ou supprimes des créneaux.</p>
+        <form class="form-row" id="addForm">
+          <label>Date<input type="date" name="date" required></label>
+          <label>Heure<input type="time" name="heure" value="09:00" required></label>
+          <button class="btn primary" type="submit">Ajouter</button>
+        </form>
+        <ul class="rows" id="adminList"></ul>
+      </div>
+      <h2>Message de Maxime</h2>
+      <div class="panel" id="msgRecu"></div>
+      <div id="secLog">
+        <h2>Journal</h2>
+        <div class="panel" id="log"><button type="button" class="btn" id="logBtn">Afficher le journal</button></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Légende</h2>
+      <div class="legend">
+        <div class="dots" id="legendDots"></div>
+        <div>L’horaire entouré de bleu est celui que Pascal a réservé.</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>Pétanque sur Glace · version 1.0 · <button type="button" class="linkbtn" id="adminBtn">espace Pascal</button></footer>
+</div>
+
+<dialog id="pwd">
+  <form method="dialog" id="pwdForm">
+    <h3>Espace Pascal</h3>
+    <p class="dlg-p">Pour réserver un créneau et gérer la liste.</p>
+    <label>Mot de passe<input type="password" name="code" autocomplete="current-password" required></label>
+    <p class="dlg-err" id="pwdErr" hidden>Mot de passe incorrect</p>
+    <div class="actions">
+      <span class="spacer"></span>
+      <button type="button" class="btn" id="pwdCancel">Annuler</button>
+      <button type="submit" class="btn primary" id="pwdOk">Valider</button>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="data.js?v=1"></script>
+<script src="config.js?v=1"></script>
+<script>
+(function(){
+"use strict";
+const CFG = window.PSG_CONFIG || {};
+const API = (CFG.API_URL || "").trim();
+const DUREE_MIN = Number(CFG.DUREE_MIN) || 120;
+const LIEU = CFG.LIEU || "";
+const RAPPELS = Array.isArray(CFG.RAPPELS_MIN) ? CFG.RAPPELS_MIN : [1440];
+
+const CYCLE = ["", "Oui", "Incertain", "Non"];
+const ICON = {"Oui":"✓","Incertain":"…","Non":"✕","":"–"};
+const LIBELLE = {"Oui":"Ça me va","Incertain":"Peut-être","Non":"Impossible","":"Pas de réponse"};
+const CLS = {"Oui":"oui","Incertain":"incertain","Non":"non","":"vide"};
+
+const $ = s => document.querySelector(s);
+const store = {
+  get(k,d){ try{ const v=localStorage.getItem("psg_"+k); return v==null?d:JSON.parse(v);}catch(e){return d;} },
+  set(k,v){ try{ localStorage.setItem("psg_"+k, JSON.stringify(v)); }catch(e){} }
+};
+const esc = s => String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+// Données : dernières connues sur l'appareil, sinon data.js
+let state = Object.assign({creneaux:[], retenu:"", message:"", capitaine:false}, window.PSG_DATA || {});
+const cache = store.get(API ? "cache" : "demo", null);
+if (cache) state = Object.assign(state, cache);
+let admin = false, popKey = "", loaded = !API || !!cache, msgTouched = false;
+
+const fmtJour = new Intl.DateTimeFormat("fr-FR",{weekday:"long", day:"numeric", month:"long"});
+const fmtD = new Intl.DateTimeFormat("fr-FR",{weekday:"short"});
+const fmtM = new Intl.DateTimeFormat("fr-FR",{month:"short"});
+const fmtMois = new Intl.DateTimeFormat("fr-FR",{month:"long", year:"numeric"});
+const parseDate = s => { const [y,m,d]=s.split("-").map(Number); return new Date(y,m-1,d); };
+const cap = s => s.charAt(0).toUpperCase()+s.slice(1);
+const hm = (h,m) => h+"h"+(m?String(m).padStart(2,"0"):"");
+const plage = h => { const [a,b]=h.split(":").map(Number), e=a*60+b+DUREE_MIN; return hm(a,b)+"–"+hm(Math.floor(e/60),e%60); };
+const chipInner = (v, txt) => `<span class="av">${txt}<i class="ic" aria-hidden="true">${ICON[v]}</i></span>`;
+const tries = () => state.creneaux.slice().sort((a,b)=>(a.date+a.heure).localeCompare(b.date+b.heure));
+const byId = id => state.creneaux.find(c=>c.id===id);
+
+let toastT;
+function toast(msg){ const el=$("#toast"); el.textContent=msg; el.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove("show"),3000); }
+
+/* ---------- Échanges avec le Google Sheet ---------- */
+async function post(payload){
+  const r = await fetch(API, {method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify(payload)});
+  const res = await r.json();
+  if (!res.ok) throw new Error(res.error||"erreur");
+  return res;
+}
+function postPascal(payload){
+  payload.code = store.get("code","");
+  return post(payload).catch(e=>{
+    if (/code capitaine/.test(e.message)){ store.set("code",""); admin=false; render(); throw new Error("mot de passe incorrect"); }
+    throw e;
+  });
+}
+function saveCache(){ store.set(API ? "cache" : "demo", state); }
+
+let busy = 0;
+async function refresh(){
+  if (!API || busy) return;
+  try{
+    const r = await fetch(API + (API.includes("?")?"&":"?") + "t=" + Date.now(), {cache:"no-store"});
+    const data = await r.json();
+    if (data.error) throw new Error(data.error);
+    if (busy) return;
+    state = Object.assign({creneaux:[], retenu:"", message:"", capitaine:false}, data);
+    loaded = true; saveCache();
+    $("#maj").textContent = "À jour · " + new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
+    render();
+  }catch(e){ $("#maj").textContent = "Hors ligne — dernières données connues"; loaded = true; render(); }
+}
+// Écriture instantanée : l'écran change tout de suite, l'envoi se fait en arrière-plan
+function write(apply, payloadFn, okMsg){
+  apply(); render();
+  if (!API){ saveCache(); if (okMsg) toast(okMsg + " ✓"); return; }
+  busy++;
+  payloadFn().then(()=>{ saveCache(); if (okMsg) toast(okMsg + " ✓"); return false; },
+                   err=>{ toast("Pas enregistré : "+err.message); return true; })
+    .then(failed=>{ busy=Math.max(0,busy-1); if (failed) refresh(); });
+}
+
+/* ---------- Affichage ---------- */
+function dateBox(date){
+  const d = parseDate(date);
+  return `<div class="datebox"><div class="d">${fmtD.format(d).replace(".","")}</div><div class="n">${d.getDate()}</div><div class="m">${fmtM.format(d)}</div></div>`;
+}
+
+function render(){
+  const seq = CYCLE.map(v=>`<span class="chip v-${CLS[v]}">${chipInner(v, v?LIBELLE[v]:"Vide")}</span>`).join('<span class="arr" aria-hidden="true">→</span>');
+  $("#hint").innerHTML = admin
+    ? "Une fois le créneau réservé au club, touche son horaire pour l’afficher à Maxime comme <b>réservé</b>. Retouche-le pour annuler."
+    : `Touche chaque horaire pour dire s’il te convient. Chaque toucher passe au suivant :<span class="seq">${seq}</span>`;
+  $("#adminTag").hidden = !admin;
+  $("#secAdmin").hidden = !admin;
+  $("#secMsg").hidden = admin;
+  $("#secLog").hidden = !API;
+  $("#adminBtn").textContent = admin ? "quitter l’espace Pascal" : "espace Pascal";
+
+  const cs = tries();
+  const vals = cs.map(c=>c.reponse||"");
+  const nb = vals.filter(Boolean).length, nbOk = vals.filter(v=>v==="Oui").length;
+  $("#gauge").innerHTML = cs.length ? `<span class="bar">${vals.map(v=>`<i class="${v?"g-"+CLS[v]:""}"></i>`).join("")}</span>${nb} sur ${cs.length} répondus · ${nbOk} qui te ${nbOk>1?"vont":"va"}` : "";
+
+  // Créneau réservé
+  const r = byId(state.retenu);
+  $("#secRetenu").hidden = !r;
+  if (r){
+    const d = parseDate(r.date), j = Math.round((d - new Date(new Date().toDateString()))/864e5);
+    const cd = j>1 ? `Dans ${j} jours` : j===1 ? "Demain" : j===0 ? "Aujourd’hui" : "";
+    $("#retenu").innerHTML = `<div class="card hero-card s-ok">${dateBox(r.date)}<div>
+      <div class="top"><span class="opp">${cap(fmtJour.format(d))}, ${plage(r.heure)}</span>${cd?`<span class="countdown">${cd}</span>`:""}</div>
+      <div class="meta">Réservé par Pascal${LIEU?" · "+esc(LIEU):""}</div>
+      <div class="actions"><button type="button" class="btn primary" id="icsBtn">📅 Ajouter à mon agenda</button></div>
+    </div></div>`;
+  }
+
+  // Liste par jour, avec un séparateur par mois
+  let html = "", mois = "";
+  if (!loaded) html = '<div class="panel"><p>Chargement des créneaux…</p></div>';
+  else if (!cs.length) html = '<div class="panel"><p>Aucun créneau pour le moment. Pascal en ajoutera bientôt.</p></div>';
+  [...new Set(cs.map(c=>c.date))].forEach(date=>{
+    const m = fmtMois.format(parseDate(date));
+    if (m!==mois){ html += `<div class="month">${cap(m)}</div>`; mois = m; }
+    const jc = cs.filter(c=>c.date===date), vs = jc.map(c=>c.reponse||"");
+    const ok = vs.filter(v=>v==="Oui").length, inc = vs.filter(v=>v==="Incertain").length, non = vs.filter(v=>v==="Non").length;
+    let st="s-none", badge="À regarder";
+    if (ok){ st="s-ok"; badge = ok+" horaire"+(ok>1?"s":"")+" possible"+(ok>1?"s":""); }
+    else if (inc){ st="s-warn"; badge = "Peut-être"; }
+    else if (non===jc.length){ st="s-bad"; badge = "Pas possible"; }
+    const chips = jc.map(c=>{
+      const v = c.reponse||"", lab = plage(c.heure), res = c.id===state.retenu;
+      return `<button type="button" class="chip v-${CLS[v]}${res?" retenu":""}${popKey===c.id?" pop":""}" data-id="${esc(c.id)}" aria-label="${lab} : ${LIBELLE[v]}${res?", réservé":""}">${chipInner(v, lab)}</button>`;
+    }).join("");
+    html += `<article class="card ${st}">${dateBox(date)}<div>
+      <div class="top"><span class="opp">${cap(fmtJour.format(parseDate(date)))}</span><span class="meta">${jc.length} horaire${jc.length>1?"s":""}</span></div>
+      <div class="statusline"><span class="badge">${badge}</span></div>
+      <div class="players">${chips}</div>
+    </div></article>`;
+  });
+  $("#list").innerHTML = html;
+  popKey = "";
+
+  if (!msgTouched) $("#msg").value = state.message || "";
+  $("#infos").innerHTML = (CFG.INFOS||[]).map(([k,v])=>`<div><span class="k">${esc(k)}</span><span>${esc(v)}</span></div>`).join("");
+
+  if (admin){
+    $("#adminList").innerHTML = cs.map(c=>`<li><span class="grow">${cap(fmtJour.format(parseDate(c.date)))}, ${plage(c.heure)}</span>
+      <span class="pill ${CLS[c.reponse||""]}">${LIBELLE[c.reponse||""]}</span>
+      <button type="button" class="btn small danger" data-del="${esc(c.id)}" aria-label="Supprimer ce créneau">Supprimer</button></li>`).join("");
+    $("#msgRecu").innerHTML = state.message ? `<div class="msg-recu">${esc(state.message)}</div>` : "<p>Pas encore de message.</p>";
+  }
+}
+
+/* ---------- Actions ---------- */
+$("#list").addEventListener("click", e=>{
+  const b = e.target.closest("button.chip"); if (!b) return;
+  const id = b.dataset.id, c = byId(id); if (!c) return;
+  if (admin){
+    const nv = state.retenu===id ? "" : id;
+    write(()=>{ state.retenu = nv; }, ()=>postPascal({action:"setRetenu", id:nv}), nv ? "Créneau réservé" : "Réservation retirée");
+  } else {
+    const nx = CYCLE[(CYCLE.indexOf(c.reponse||"")+1)%CYCLE.length];
+    popKey = id;
+    write(()=>{ c.reponse = nx; }, ()=>post({action:"setReponse", id, reponse:nx}), "");
+  }
+  const again = document.querySelector(`button.chip[data-id="${CSS.escape(id)}"]`); if (again) again.focus();
+});
+
+$("#msg").addEventListener("input", ()=>{ msgTouched = true; });
+$("#msgSave").addEventListener("click", ()=>{
+  const txt = $("#msg").value.trim();
+  write(()=>{ state.message = txt; msgTouched = false; }, ()=>post({action:"setMessage", message:txt}), "Message enregistré");
+});
+
+$("#addForm").addEventListener("submit", e=>{
+  e.preventDefault();
+  const f = e.target, date = f.date.value, heure = f.heure.value, id = date+"_"+heure;
+  if (byId(id)){ toast("Ce créneau existe déjà"); return; }
+  write(()=>{ state.creneaux.push({id, date, heure, reponse:""}); }, ()=>postPascal({action:"addCreneau", date, heure}), "Créneau ajouté");
+});
+$("#adminList").addEventListener("click", e=>{
+  const b = e.target.closest("[data-del]"); if (!b) return;
+  const id = b.dataset.del, c = byId(id);
+  if (!confirm("Supprimer le créneau du " + fmtJour.format(parseDate(c.date)) + ", " + plage(c.heure) + " ?")) return;
+  write(()=>{ state.creneaux = state.creneaux.filter(x=>x.id!==id); if (state.retenu===id) state.retenu=""; }, ()=>postPascal({action:"deleteCreneau", id}), "Créneau supprimé");
+});
+
+$("#logBtn").addEventListener("click", async ()=>{
+  const b = $("#logBtn"); b.disabled = true;
+  try{
+    const res = await postPascal({action:"getLog"});
+    $("#log").innerHTML = res.journal.length ? res.journal.map(l=>{
+      const c = byId(l.creneau), quoi = c ? cap(fmtJour.format(parseDate(c.date)))+", "+plage(c.heure) : l.creneau;
+      return `<div class="log-r">${esc(l.quand)} · <b>${esc(l.qui)}</b> · ${esc(quoi)} : ${l.avant?esc(l.avant)+" → ":""}${esc(l.apres)}</div>`;
+    }).join("") : "<p>Journal vide.</p>";
+  }catch(err){ toast("Journal indisponible : "+err.message); b.disabled = false; }
+});
+
+/* ---------- Espace Pascal (mot de passe) ---------- */
+const pwd = $("#pwd"), pf = $("#pwdForm");
+function closeCode(){ if (pwd.close) pwd.close(); else pwd.removeAttribute("open"); }
+$("#pwdCancel").addEventListener("click", closeCode);
+$("#adminBtn").addEventListener("click", ()=>{
+  if (admin){ admin = false; render(); return; }
+  if (API && state.capitaine && !store.get("code","")){
+    $("#pwdErr").hidden = true; pf.code.value = "";
+    if (pwd.showModal) pwd.showModal(); else pwd.setAttribute("open","");
+    pf.code.focus(); return;
+  }
+  admin = true; render(); window.scrollTo({top:0});
+});
+pf.addEventListener("submit", async e=>{
+  e.preventDefault();
+  const code = pf.code.value.trim(); if (!code) return;
+  const b = $("#pwdOk"); b.disabled = true;
+  try{
+    await post({action:"checkCode", code});
+    store.set("code", code); closeCode(); admin = true; render(); toast("Espace Pascal ouvert ✓");
+  }catch(err){
+    $("#pwdErr").textContent = /code capitaine/.test(err.message) ? "Mot de passe incorrect" : "Vérification impossible : "+err.message;
+    $("#pwdErr").hidden = false; pf.code.select();
+  }finally{ b.disabled = false; }
+});
+
+/* ---------- Export agenda (.ics) ---------- */
+const TZ = ["BEGIN:VTIMEZONE","TZID:Europe/Zurich","BEGIN:STANDARD","DTSTART:19701025T030000","TZOFFSETFROM:+0200","TZOFFSETTO:+0100","RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU","END:STANDARD","BEGIN:DAYLIGHT","DTSTART:19700329T020000","TZOFFSETFROM:+0100","TZOFFSETTO:+0200","RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU","END:DAYLIGHT","END:VTIMEZONE"];
+const icsEsc = s => String(s).replace(/\\/g,"\\\\").replace(/;/g,"\\;").replace(/,/g,"\\,").replace(/\n/g,"\\n");
+document.addEventListener("click", e=>{
+  if (!e.target.closest("#icsBtn")) return;
+  const r = byId(state.retenu); if (!r) return;
+  const [h,m] = r.heure.split(":").map(Number), fin = h*60+m+DUREE_MIN, p = n=>String(n).padStart(2,"0"), d = r.date.replace(/-/g,"");
+  const tenue = (CFG.INFOS||[]).find(x=>x[0]==="Tenue");
+  const ev = ["BEGIN:VEVENT","UID:"+r.id+"@petanque-sur-glace","DTSTAMP:"+new Date().toISOString().replace(/[-:]/g,"").replace(/\.\d+/,""),
+    "DTSTART;TZID=Europe/Zurich:"+d+"T"+p(h)+p(m)+"00","DTEND;TZID=Europe/Zurich:"+d+"T"+p(Math.floor(fin/60))+p(fin%60)+"00",
+    "SUMMARY:"+icsEsc("🥌 Initiation curling avec Pascal")];
+  if (LIEU) ev.push("LOCATION:"+icsEsc(LIEU));
+  ev.push("DESCRIPTION:"+icsEsc((tenue?"Tenue : "+tenue[1]+"\n":"")+"Infos : "+location.href.split(/[?#]/)[0]));
+  RAPPELS.filter(n=>Number(n)>0).forEach(n=>{
+    ev.push("BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:Initiation curling","TRIGGER:-"+(n%1440===0?"P"+(n/1440)+"D":n%60===0?"PT"+(n/60)+"H":"PT"+n+"M"),"END:VALARM");
+  });
+  ev.push("END:VEVENT");
+  const ics = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//PetanqueSurGlace//FR","METHOD:PUBLISH",...TZ,...ev,"END:VCALENDAR"].join("\r\n")+"\r\n";
+  const url = URL.createObjectURL(new Blob([ics],{type:"text/calendar;charset=utf-8"}));
+  const a = document.createElement("a"); a.href=url; a.download="Initiation-curling.ics"; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),2000);
+});
+
+$("#legendDots").innerHTML = ["Oui","Incertain","Non",""].map(v=>`<span class="chip v-${CLS[v]}">${chipInner(v, LIBELLE[v])}</span>`).join("");
+if (!API) $("#maj").textContent = "Curling Club Morges · mode démo";
+
+render();
+refresh();
+document.addEventListener("visibilitychange", ()=>{ if (!document.hidden) refresh(); });
+})();
+
+</script>
+</body>
+</html>
