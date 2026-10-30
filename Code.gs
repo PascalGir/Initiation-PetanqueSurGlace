@@ -21,18 +21,16 @@ function codeCapitaine_() {
 const ONGLET_CRENEAUX = 'Creneaux';
 const ONGLET_INFOS = 'Infos';
 const ONGLET_JOURNAL = 'Journal';
-const COLS = ['ID', 'Date', 'Heure', 'Réponse', 'Retenu'];
+const COLS = ['ID', 'Date', 'Heure', 'Réponse', 'Retenu', 'Archivé'];
 const REPONSES = ['', 'Oui', 'Incertain', 'Non'];
 const LIBELLES = { '': 'Pas de réponse', 'Oui': 'Ça me va', 'Incertain': 'Peut-être', 'Non': 'Impossible' };
 const TZ = 'Europe/Zurich';
 
-// Créneaux de départ (vendredis et dimanches de novembre 2026), utilisés par « installer »
+// Créneaux de départ, utilisés par « installer » (nouveau Sheet) et « majDecembre » (Sheet existant)
 const CRENEAUX_DEPART = [
-  ['2026-11-13', ['09:00', '11:00', '13:00', '15:00']],
-  ['2026-11-15', ['11:00', '13:00', '15:00']],
-  ['2026-11-20', ['09:00', '11:00', '13:00', '15:00']],
-  ['2026-11-22', ['11:00', '13:00', '15:00']],
-  ['2026-11-27', ['09:00', '11:00', '13:00']]
+  ['2026-12-04', ['13:00', '19:00']],
+  ['2026-12-17', ['13:00']],
+  ['2026-12-18', ['11:00', '13:00', '17:00', '19:00']]
 ];
 
 /* ---------- Lecture ---------- */
@@ -49,12 +47,13 @@ function lireTout_() {
       date: date_(o['Date']),
       heure: heure_(o['Heure']),
       reponse: REPONSES.indexOf(String(o['Réponse']).trim()) >= 0 ? String(o['Réponse']).trim() : '',
-      retenu: String(o['Retenu']).trim() !== ''
+      retenu: String(o['Retenu']).trim() !== '',
+      archive: String(o['Archivé'] || '').trim() !== ''
     };
   }).filter(function (c) { return c.id && c.date; });
   const retenu = creneaux.filter(function (c) { return c.retenu; })[0];
   return {
-    creneaux: creneaux.map(function (c) { return { id: c.id, date: c.date, heure: c.heure, reponse: c.reponse }; }),
+    creneaux: creneaux.map(function (c) { return { id: c.id, date: c.date, heure: c.heure, reponse: c.reponse, archive: c.archive }; }),
     retenu: retenu ? retenu.id : '',
     message: info_('Message'),
     capitaine: !!codeCapitaine_()
@@ -87,6 +86,7 @@ function action_(b) {
     case 'setRetenu': capitaine_(b); return setRetenu_(b);
     case 'addCreneau': capitaine_(b); return addCreneau_(b);
     case 'deleteCreneau': capitaine_(b); return deleteCreneau_(b);
+    case 'setArchive': capitaine_(b); return setArchive_(b);
     default: throw new Error('action inconnue');
   }
 }
@@ -101,7 +101,7 @@ function setReponse_(b) {
   if (REPONSES.indexOf(r) < 0) throw new Error('réponse inconnue');
   const sh = feuille_(ONGLET_CRENEAUX);
   const row = ligneParId_(sh, b.id);
-  const col = COLS.indexOf('Réponse') + 1;
+  const col = colonne_(sh, 'Réponse');
   const avant = String(sh.getRange(row, col).getValue()).trim();
   sh.getRange(row, col).setValue(r);
   journal_('Maxime', b.id, LIBELLES[avant] || avant, LIBELLES[r]);
@@ -118,7 +118,7 @@ function setMessage_(b) {
 
 function setRetenu_(b) {
   const sh = feuille_(ONGLET_CRENEAUX);
-  const col = COLS.indexOf('Retenu') + 1;
+  const col = colonne_(sh, 'Retenu');
   if (sh.getLastRow() >= 2) sh.getRange(2, col, sh.getLastRow() - 1, 1).clearContent();
   if (b.id) sh.getRange(ligneParId_(sh, b.id), col).setValue('Oui');
   journal_('Pascal', b.id || '—', '', b.id ? 'Créneau retenu' : 'Plus de créneau retenu');
@@ -131,9 +131,19 @@ function addCreneau_(b) {
   const sh = feuille_(ONGLET_CRENEAUX);
   const id = date + '_' + heure;
   if (ligneParId_(sh, id, true)) throw new Error('ce créneau existe déjà');
-  sh.appendRow([id, date, heure, '', '']);
+  ajouterLigne_(sh, id, date, heure);
   trier_(sh);
   journal_('Pascal', id, '', 'Créneau ajouté');
+  return {};
+}
+
+// Masquer (archive = true) ou réafficher des créneaux : les réponses de Maxime sont gardées
+function setArchive_(b) {
+  const sh = feuille_(ONGLET_CRENEAUX);
+  const col = colonne_(sh, 'Archivé');
+  const ids = Array.isArray(b.ids) ? b.ids : [b.id];
+  ids.forEach(function (id) { sh.getRange(ligneParId_(sh, id), col).setValue(b.archive ? 'Oui' : ''); });
+  journal_('Pascal', ids.length > 1 ? ids.length + ' créneaux' : ids[0], '', b.archive ? 'Masqué' : 'Réaffiché');
   return {};
 }
 
@@ -182,6 +192,21 @@ function ligneParId_(sh, id, silencieux) {
   if (i < 1) { if (silencieux) return 0; throw new Error('créneau introuvable'); }
   return i + 1;
 }
+// Numéro de colonne d'après son titre ; la colonne est créée si elle manque (Sheet d'une version précédente)
+function colonne_(sh, nom) {
+  const h = sh.getRange(1, 1, 1, Math.max(1, sh.getLastColumn())).getValues()[0].map(function (x) { return String(x).trim(); });
+  const i = h.indexOf(nom);
+  if (i >= 0) return i + 1;
+  const col = sh.getLastColumn() + 1;
+  sh.getRange(1, col).setValue(nom);
+  return col;
+}
+function ajouterLigne_(sh, id, date, heure) {
+  const n = Math.max(sh.getLastColumn(), COLS.length);
+  const row = new Array(n).fill('');
+  row[colonne_(sh, 'ID') - 1] = id; row[colonne_(sh, 'Date') - 1] = date; row[colonne_(sh, 'Heure') - 1] = heure;
+  sh.appendRow(row);
+}
 function trier_(sh) {
   if (sh.getLastRow() > 2) sh.getRange(2, 1, sh.getLastRow() - 1, sh.getLastColumn()).sort(1);
 }
@@ -220,8 +245,9 @@ function installer() {
     sh.appendRow(COLS);
     sh.setFrozenRows(1);
     const rows = [];
-    CRENEAUX_DEPART.forEach(function (j) { j[1].forEach(function (h) { rows.push([j[0] + '_' + h, j[0], h, '', '']); }); });
+    CRENEAUX_DEPART.forEach(function (j) { j[1].forEach(function (h) { rows.push([j[0] + '_' + h, j[0], h, '', '', '']); }); });
     sh.getRange(2, 1, rows.length, COLS.length).setValues(rows);
+    sh.getRange('F2:F').setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(['Oui'], true).setAllowInvalid(false).build());
     sh.getRange('E2:E').setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(['Oui'], true).setAllowInvalid(false).build());
     sh.getRange('D2:D').setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(['Oui', 'Incertain', 'Non'], true).setAllowInvalid(false).build());
   }
@@ -230,4 +256,28 @@ function installer() {
   const vide = ss.getSheetByName('Feuille 1') || ss.getSheetByName('Sheet1');
   if (vide && vide.getLastRow() === 0 && ss.getSheets().length > 1) ss.deleteSheet(vide);
   Logger.log('Onglets prêts : ' + ONGLET_CRENEAUX + ', ' + ONGLET_INFOS + '. Le Journal se crée à la première réponse.');
+}
+
+/* ---------- Mise à jour décembre 2026 (à lancer une seule fois sur le Sheet existant) ---------- */
+// Ajoute la colonne « Archivé », ajoute les créneaux de décembre qui manquent
+// et masque tous les créneaux de novembre (ils restent dans le Sheet avec les réponses de Maxime).
+function majDecembre() {
+  const sh = feuille_(ONGLET_CRENEAUX);
+  const colA = colonne_(sh, 'Archivé');
+  let ajoutes = 0, masques = 0;
+  CRENEAUX_DEPART.forEach(function (j) {
+    j[1].forEach(function (h) {
+      const id = j[0] + '_' + h;
+      if (!ligneParId_(sh, id, true)) { ajouterLigne_(sh, id, j[0], h); ajoutes++; }
+    });
+  });
+  if (sh.getLastRow() >= 2) {
+    const dates = sh.getRange(2, colonne_(sh, 'Date'), sh.getLastRow() - 1, 1).getDisplayValues();
+    dates.forEach(function (r, i) {
+      if (String(r[0]).indexOf('2026-11') === 0) { sh.getRange(i + 2, colA).setValue('Oui'); masques++; }
+    });
+  }
+  trier_(sh);
+  journal_('Pascal', 'Mise à jour', '', ajoutes + ' créneaux de décembre ajoutés, ' + masques + ' de novembre masqués');
+  Logger.log(ajoutes + ' créneaux ajoutés, ' + masques + ' créneaux de novembre masqués.');
 }
