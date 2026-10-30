@@ -6,7 +6,7 @@ Adresse de la page : https://pascalgir.github.io/Initiation-PetanqueSurGlace/
 
 ## Utilisation
 
-- **Maxime** touche chaque horaire pour répondre : vide → Ça me va → Peut-être → Impossible. Il peut laisser un message à Pascal.
+- **Maxime** touche un horaire et choisit sa réponse dans un petit menu : Ça me va, Peut-être ou Impossible. Il peut laisser un message à Pascal.
 - **Pascal** ouvre l'« espace Pascal » (lien en bas de page, mot de passe saisi une fois par appareil). Il y voit le message de Maxime et le journal, ajoute ou supprime des créneaux, et touche un horaire pour le marquer réservé : il s'affiche alors en grand en haut de la page, avec le bouton d'agenda.
 
 ## Fichiers

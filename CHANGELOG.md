@@ -1,5 +1,8 @@
 # Historique des versions
 
+## 1.3 - 2026-10-30
+- Toucher un horaire ouvre un petit menu : Ça me va, Peut-être, Impossible. Un seul toucher pour choisir, la réponse actuelle est entourée, et le menu se ferme si on touche ailleurs.
+
 ## 1.2 - 2026-10-30
 - Plus aucune mention de « mode démo » sur la page ni dans les fichiers.
 

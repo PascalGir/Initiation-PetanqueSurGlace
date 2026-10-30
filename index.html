@@ -203,6 +203,21 @@ dialog .actions{display:flex;gap:8px;align-items:center}
 .welcome ol{margin:0 0 8px;padding-left:22px}
 .welcome li{margin:3px 0}
 .welcome .sig{font-weight:700;margin:0;color:var(--p-acc-ink)}
+
+/* ============ Petit menu de réponse ============ */
+.menu{position:absolute;z-index:20;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 30px rgba(10,25,40,.2);padding:6px;display:flex;flex-direction:column;gap:3px;min-width:190px;animation:menuIn .12s ease-out}
+.menu[hidden]{display:none}
+@keyframes menuIn{from{opacity:0;transform:translateY(-4px) scale(.97)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){.menu{animation:none}}
+.menu-t{font-size:12px;color:var(--muted);padding:4px 8px 6px;font-weight:600}
+.menu button{font:inherit;font-size:14.5px;font-weight:650;display:flex;align-items:center;gap:10px;padding:8px 14px 8px 8px;border-radius:99px;border:2px solid transparent;background:transparent;color:var(--ink);cursor:pointer;text-align:left}
+.menu button:hover{background:var(--surface-2)}
+.menu button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.menu .ic{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-style:normal;font-weight:800;color:#fff;flex:none}
+.menu .o-oui .ic{background:var(--c-oui)} .menu .o-incertain .ic{background:var(--p-inc-ic)} .menu .o-non .ic{background:var(--c-non)}
+.menu .o-oui.on{background:var(--p-oui-bg);border-color:var(--p-oui-line);color:var(--p-oui-ink)}
+.menu .o-incertain.on{background:var(--p-inc-bg);border-color:var(--p-inc-line);color:var(--p-inc-ink)}
+.menu .o-non.on{background:var(--p-non-bg);border-color:var(--p-non-line);color:var(--p-non-ink)}
 /* ============ Téléphone ============ */
 @media (max-width:560px){
   .hero-in{padding:18px 16px 16px;min-height:0}
@@ -295,7 +310,7 @@ dialog .actions{display:flex;gap:8px;align-items:center}
     </section>
   </main>
 
-  <footer>Pétanque sur Glace · version 1.2 · <button type="button" class="linkbtn" id="adminBtn">espace Pascal</button></footer>
+  <footer>Pétanque sur Glace · version 1.3 · <button type="button" class="linkbtn" id="adminBtn">espace Pascal</button></footer>
 </div>
 
 <dialog id="pwd">
@@ -312,9 +327,10 @@ dialog .actions{display:flex;gap:8px;align-items:center}
   </form>
 </dialog>
 
+<div class="menu" id="choix" role="menu" aria-label="Ta réponse" hidden></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<script src="data.js?v=4"></script>
-<script src="config.js?v=4"></script>
+<script src="data.js?v=5"></script>
+<script src="config.js?v=5"></script>
 <script>
 (function(){
 "use strict";
@@ -404,10 +420,10 @@ function dateBox(date){
 }
 
 function render(){
-  const seq = CYCLE.map(v=>`<span class="chip v-${CLS[v]}">${chipInner(v, v?LIBELLE[v]:"Vide")}</span>`).join('<span class="arr" aria-hidden="true">→</span>');
+  const seq = ["Oui","Incertain","Non"].map(v=>`<span class="chip v-${CLS[v]}">${chipInner(v, LIBELLE[v])}</span>`).join("");
   $("#hint").innerHTML = admin
     ? "Une fois le créneau réservé au club, touche son horaire pour l’afficher à Maxime comme <b>réservé</b>. Retouche-le pour annuler."
-    : `Touche chaque horaire pour dire s’il te convient. Chaque toucher passe au suivant :<span class="seq">${seq}</span>`;
+    : `Touche un horaire, puis choisis ta réponse :<span class="seq">${seq}</span>`;
   $("#adminTag").hidden = !admin;
   $("#secAdmin").hidden = !admin;
   $("#secMsg").hidden = admin;
@@ -429,7 +445,7 @@ function render(){
        <p>J’ai créé cette page pour organiser ton initiation au curling avec moi, au Curling Club Morges. L’initiation dure 2 heures, et je m’occupe de réserver la piste.</p>
        <p>Ce que je te demande :</p>
        <ol>
-         <li>Touche chaque horaire ci-dessous pour dire s’il te convient : une fois pour « Ça me va », deux fois pour « Peut-être », trois fois pour « Impossible ».</li>
+         <li>Touche chaque horaire ci-dessous et choisis ta réponse dans le petit menu : « Ça me va », « Peut-être » ou « Impossible ».</li>
          <li>Réponds à autant d’horaires que possible : plus tu en indiques, plus j’ai de chances d’en réserver un qui te convient.</li>
          <li>Si tu veux, laisse-moi un mot en bas de la page.</li>
        </ol>
@@ -492,13 +508,60 @@ $("#list").addEventListener("click", e=>{
   if (admin){
     const nv = state.retenu===id ? "" : id;
     write(()=>{ state.retenu = nv; }, ()=>postPascal({action:"setRetenu", id:nv}), nv ? "Créneau réservé" : "Réservation retirée");
+    const again = document.querySelector(`button.chip[data-id="${CSS.escape(id)}"]`); if (again) again.focus();
   } else {
-    const nx = CYCLE[(CYCLE.indexOf(c.reponse||"")+1)%CYCLE.length];
-    popKey = id;
-    write(()=>{ c.reponse = nx; }, ()=>post({action:"setReponse", id, reponse:nx}), "");
+    if (menuId === id) closeMenu(true); else openMenu(b, id);
   }
-  const again = document.querySelector(`button.chip[data-id="${CSS.escape(id)}"]`); if (again) again.focus();
 });
+
+/* ---------- Petit menu de réponse (Ça me va / Peut-être / Impossible) ---------- */
+const menu = $("#choix");
+let menuId = "";
+function openMenu(chip, id){
+  const c = byId(id); if (!c) return;
+  menuId = id;
+  const cur = c.reponse || "";
+  menu.innerHTML = `<div class="menu-t">${cap(fmtJour.format(parseDate(c.date)))} · ${plage(c.heure)}</div>` +
+    ["Oui","Incertain","Non"].map(v=>`<button type="button" role="menuitemradio" aria-checked="${v===cur}" class="o-${CLS[v]}${v===cur?" on":""}" data-v="${v}"><i class="ic" aria-hidden="true">${ICON[v]}</i>${LIBELLE[v]}</button>`).join("");
+  menu.hidden = false;
+  const r = chip.getBoundingClientRect(), mw = menu.offsetWidth, mh = menu.offsetHeight;
+  let left = r.left + r.width/2 - mw/2;
+  left = Math.max(8, Math.min(left, document.documentElement.clientWidth - mw - 8));
+  let top = r.bottom + 8;
+  if (top + mh > window.innerHeight - 8 && r.top - mh - 8 > 8) top = r.top - mh - 8;
+  menu.style.left = (left + window.scrollX) + "px";
+  menu.style.top = (top + window.scrollY) + "px";
+  (menu.querySelector("button.on") || menu.querySelector("button")).focus({preventScroll:true});
+}
+function closeMenu(focusChip){
+  if (!menuId) return;
+  const id = menuId; menuId = ""; menu.hidden = true;
+  if (focusChip){ const ch = document.querySelector(`button.chip[data-id="${CSS.escape(id)}"]`); if (ch) ch.focus({preventScroll:true}); }
+}
+menu.addEventListener("click", e=>{
+  const b = e.target.closest("button[data-v]"); if (!b) return;
+  const id = menuId, c = byId(id), v = b.dataset.v;
+  closeMenu(false);
+  if (!c) return;
+  if ((c.reponse||"") !== v){
+    popKey = id;
+    write(()=>{ c.reponse = v; }, ()=>post({action:"setReponse", id, reponse:v}), "");
+  }
+  const ch = document.querySelector(`button.chip[data-id="${CSS.escape(id)}"]`); if (ch) ch.focus({preventScroll:true});
+});
+document.addEventListener("click", e=>{
+  if (menuId && !menu.contains(e.target) && !e.target.closest("button.chip")) closeMenu(false);
+});
+document.addEventListener("keydown", e=>{
+  if (!menuId) return;
+  if (e.key === "Escape"){ e.preventDefault(); closeMenu(true); return; }
+  if (e.key === "ArrowDown" || e.key === "ArrowUp"){
+    e.preventDefault();
+    const bs = [...menu.querySelectorAll("button")], i = bs.indexOf(document.activeElement);
+    bs[(i + (e.key==="ArrowDown"?1:bs.length-1)) % bs.length].focus();
+  }
+});
+window.addEventListener("resize", ()=>closeMenu(false));
 
 $("#msg").addEventListener("input", ()=>{ msgTouched = true; });
 $("#msgSave").addEventListener("click", ()=>{
@@ -535,6 +598,7 @@ const pwd = $("#pwd"), pf = $("#pwdForm");
 function closeCode(){ if (pwd.close) pwd.close(); else pwd.removeAttribute("open"); }
 $("#pwdCancel").addEventListener("click", closeCode);
 $("#adminBtn").addEventListener("click", ()=>{
+  closeMenu(false);
   if (admin){ admin = false; render(); return; }
   if (API && state.capitaine && !store.get("code","")){
     $("#pwdErr").hidden = true; pf.code.value = "";
